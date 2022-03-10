@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FeedbackReporting.API
+namespace FeedbackReporting.Presentation
 {
     public class Program
     {

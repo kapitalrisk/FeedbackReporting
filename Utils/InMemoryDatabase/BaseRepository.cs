@@ -1,27 +1,27 @@
 ﻿using Dapper;
 using Dapper.FastCrud;
+using Dapper.FastCrud.Configuration.StatementOptions.Builders;
+using InMemoryDatabase.UseCasePattern;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
 namespace InMemoryDatabase
 {
     public class BaseRepository : IDisposable
-    {
-        private readonly IInMemoryDatabaseConnectionFactory _connectionFactory;
+    {        private bool _disposed = false;
 
-        private bool _disposed = false;
+        internal IUnitOfWork _unitOfWork;
 
-        internal IDbConnection Connection => _connectionFactory.Create();
-
-        protected BaseRepository(IInMemoryDatabaseConnectionFactory connectionFactory)
+        protected BaseRepository(IUnitOfWork unitOfWork)
         {
-            _connectionFactory = connectionFactory;
+            _unitOfWork = unitOfWork;
         }
 
         internal async Task<int> ExecuteAsync(string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         {
-            return await Connection.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
+            return await _unitOfWork.Connection.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
         }
 
         public void Dispose()
@@ -37,7 +37,7 @@ namespace InMemoryDatabase
 
             if (disposing)
             {
-                Connection?.Close();
+                _unitOfWork?.Dispose();
             }
             _disposed = true;
         }
@@ -45,17 +45,55 @@ namespace InMemoryDatabase
 
     public class BaseRepository<TEntity> : BaseRepository
     {
-        protected BaseRepository(IInMemoryDatabaseConnectionFactory connectionFactory) : base (connectionFactory)
+        protected BaseRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
 
         public async Task InsertAsync(TEntity entity)
         {
-            await Connection.InsertAsync(entity);
+            await _unitOfWork.Connection.InsertAsync(entity, AttachTransaction);
         }
 
         public async Task<TEntity> GetAsync(TEntity entity)
         {
-            return await Connection.GetAsync(entity);
+            return await _unitOfWork.Connection.GetAsync(entity, AttachTransaction);
+        }
+
+        public async Task<IEnumerable<TEntity>> FindAsync(FormattableString whereClause, object parameters)
+        {
+            if (_unitOfWork.Transaction != null)
+            {
+                return await _unitOfWork.Connection.FindAsync<TEntity>(x => x.Where(whereClause).WithParameters(parameters).AttachToTransaction(_unitOfWork.Transaction));
+            }
+            return await _unitOfWork.Connection.FindAsync<TEntity>(x => x.Where(whereClause).WithParameters(parameters));
+        }
+
+        public async Task<bool> DeleteAsync(TEntity entityToDelete)
+        {
+            return await _unitOfWork.Connection.DeleteAsync(entityToDelete, AttachTransaction);
+        }
+
+        private void AttachTransaction(IStandardSqlStatementOptionsBuilder<TEntity> statement)
+        {
+            if (_unitOfWork.Transaction != null)
+            {
+                statement.AttachToTransaction(_unitOfWork.Transaction);
+            }
+        }
+
+        private void AttachTransaction(IRangedBatchSelectSqlSqlStatementOptionsOptionsBuilder<TEntity> statement)
+        {
+            if (_unitOfWork.Transaction != null)
+            {
+                statement.AttachToTransaction(_unitOfWork.Transaction);
+            }
+        }
+
+        private void AttachTransaction(ISelectSqlSqlStatementOptionsBuilder<TEntity> statement)
+        {
+            if (_unitOfWork.Transaction != null)
+            {
+                statement.AttachToTransaction(_unitOfWork.Transaction);
+            }
         }
     }
 }

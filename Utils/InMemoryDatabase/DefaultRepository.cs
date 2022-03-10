@@ -1,15 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using Dapper;
+using System.Threading.Tasks;
 
 namespace InMemoryDatabase
 {
-    internal sealed class DefaultRepository : BaseRepository, IDefaultRepository
+    internal sealed class DefaultRepository : IDefaultRepository
     {
-        public DefaultRepository(IInMemoryDatabaseConnectionFactory connectionFactory) : base(connectionFactory)
-        { }
+        private readonly IInMemoryDatabaseConnectionFactory _connectionFactory;
+
+        public DefaultRepository(IInMemoryDatabaseConnectionFactory connectionFactory)
+        {
+            _connectionFactory = connectionFactory;
+        }
 
         async Task<int> IDefaultRepository.ExecuteAsync(string sql)
         {
-            return await base.ExecuteAsync(sql, null, null, null, null);
+            return await _connectionFactory.Create().ExecuteAsync(sql, null, null, null, null);
         }
     }
 }

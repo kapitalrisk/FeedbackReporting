@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using InMemoryDatabase.UseCasePattern;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InMemoryDatabase
 {
@@ -9,6 +10,7 @@ namespace InMemoryDatabase
             services.AddTransient<IDefaultRepository, DefaultRepository>();
             services.AddTransient<IDatabaseGenerator, DatabaseGenerator>();
             services.AddSingleton<IInMemoryDatabaseConnectionFactory, InMemoryDatabaseConnectionFactory>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             return services;
         }
