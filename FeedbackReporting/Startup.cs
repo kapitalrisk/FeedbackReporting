@@ -53,7 +53,7 @@ namespace FeedbackReporting.Presentation
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer sqddgfz5sq547wx4\"",
+                    Description = "JWT Authorization header\r\n\r\n Enter 'Bearer <accessToken>'.\r\n\r\nExample: \"Bearer sqddgfz5sq547wx4\"",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                  {
@@ -112,7 +112,9 @@ namespace FeedbackReporting.Presentation
                 // Insert default admin user, again never do that
                 var defaultRepo = app.ApplicationServices.GetService<IDefaultRepository>();
                 var adminPasswordHash = PasswordHashHandler.GetPasswordHashForStorage("admin");
+                var userPasswordHash = PasswordHashHandler.GetPasswordHashForStorage("user");
                 defaultRepo.ExecuteAsync($"insert into user (name, role, password_hash) values ('admin', 'Admin', '{adminPasswordHash}')");
+                defaultRepo.ExecuteAsync($"insert into user (name, role, password_hash) values ('user', 'User', '{userPasswordHash}')");
             }
 
             app.UseHttpsRedirection();

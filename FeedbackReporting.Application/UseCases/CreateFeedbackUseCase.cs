@@ -19,6 +19,9 @@ namespace FeedbackReporting.Application.UseCases
 
         public override async Task<int> ActuallyExecuteAsync(FeedbackRessource entityToInsert)
         {
+            if (entityToInsert == null)
+                return -1;
+
             return await _feedbackRepo.Insert(entityToInsert.ToEntity());
         }
     }

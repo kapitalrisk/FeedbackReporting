@@ -8,7 +8,7 @@ namespace FeedbackReporting.Domain.Models.Ressources
         public int Id { get; set;  }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string CreatorId { get; set; }
+        public string CreatorName { get; set; }
         public DateTime CreationDate { get; set; }
         public string Payload { get; set; }
 
@@ -20,7 +20,7 @@ namespace FeedbackReporting.Domain.Models.Ressources
             this.Id = fromEntity.Id;
             this.Title = fromEntity.Title;
             this.Description = fromEntity.Description;
-            this.CreatorId = fromEntity.CreatorId;
+            this.CreatorName = fromEntity.CreatorName;
             this.CreationDate = fromEntity.CreationDate;
             this.Payload = fromEntity.Payload;
         }
@@ -32,7 +32,7 @@ namespace FeedbackReporting.Domain.Models.Ressources
                 Id = this.Id,
                 Title = this.Title,
                 Description = this.Description,
-                CreatorId = this.CreatorId,
+                CreatorName = this.CreatorName,
                 CreationDate = this.CreationDate,
                 Payload = this.Payload
             };

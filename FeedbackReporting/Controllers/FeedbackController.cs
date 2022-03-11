@@ -20,13 +20,19 @@ namespace FeedbackReporting.Presentation.Controllers
         private readonly ICreateFeedbackUseCase _createFeedbackUseCase;
         private readonly IGetFeedbackByIdUseCase _getFeedbackByIdUseCase;
         private readonly IAttachDocumentToFeedbackUseCase _attachDocumentToFeedbackUseCase;
+        private readonly IGetFeedbackAttachmentsZipUseCase _getFeedbackAttachmentsUseCase;
 
-        public FeedbackController(ILogger<FeedbackController> logger, ICreateFeedbackUseCase createFeedbackUseCase, IGetFeedbackByIdUseCase getFeedbackByIdUseCase, IAttachDocumentToFeedbackUseCase attachDocumentToFeedbackUseCase)
+        public FeedbackController(ILogger<FeedbackController> logger, 
+            ICreateFeedbackUseCase createFeedbackUseCase, 
+            IGetFeedbackByIdUseCase getFeedbackByIdUseCase, 
+            IAttachDocumentToFeedbackUseCase attachDocumentToFeedbackUseCase,
+            IGetFeedbackAttachmentsZipUseCase getFeedbackAttachmentsUseCase)
         {
             _logger = logger;
             _createFeedbackUseCase = createFeedbackUseCase;
             _getFeedbackByIdUseCase = getFeedbackByIdUseCase;
             _attachDocumentToFeedbackUseCase = attachDocumentToFeedbackUseCase;
+            _getFeedbackAttachmentsUseCase = getFeedbackAttachmentsUseCase;
         }
 
         [HttpPost]
@@ -35,6 +41,10 @@ namespace FeedbackReporting.Presentation.Controllers
         public async Task<IActionResult> Create([FromBody] FeedbackRessource ressource)
         {
             var result = await _createFeedbackUseCase.ExecuteAsync(ressource);
+
+            if (result == Database.InsertionErrorReturnValue)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
             return Ok(result);
         }
 
@@ -46,7 +56,7 @@ namespace FeedbackReporting.Presentation.Controllers
             var result = await _getFeedbackByIdUseCase.ExecuteAsync(id);
 
             if (result == null)
-                return NotFound();
+                return NotFound(id);
 
             return Ok(result);
         }
@@ -58,12 +68,22 @@ namespace FeedbackReporting.Presentation.Controllers
         {
             if (attachment.Length > _maxFileSize)
                 return BadRequest($"Cannot attach files larger than {_maxFileSize} bytes");
+
             var memoryStream = new MemoryStream();
             await attachment.CopyToAsync(memoryStream);
-
             var result = await _attachDocumentToFeedbackUseCase.ExecuteAsync(new FeedbackAttachmentRessource { FeedbackId = feedbackId, Data = memoryStream.ToArray() });
 
             return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("attachement/{feedbackId}")]
+        [AuthorizedRoles(UserRoles.Admin)]
+        public async Task<IActionResult> GetFeedbackAttachmentZip(int feedbackId)
+        {
+            var result = await _getFeedbackAttachmentsUseCase.ExecuteAsync(feedbackId);
+
+            return File(result.ToArray(), "application/zip", $"attachments_{feedbackId}.zip");
         }
     }
 }

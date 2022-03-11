@@ -1,4 +1,5 @@
-﻿using FeedbackReporting.Domain.Models.Ressources;
+﻿using FeedbackReporting.Domain.Constants;
+using FeedbackReporting.Domain.Models.Ressources;
 using FeedbackReporting.Domain.Repositories;
 using FeedbackReporting.Domain.Services;
 using InMemoryDatabase;
@@ -31,8 +32,8 @@ namespace FeedbackReporting.Application.Services
             var claims = new[] {
                  new Claim(JwtRegisteredClaimNames.Sub, user.Name),
                  new Claim(JwtRegisteredClaimNames.Email, user.Name),
-                 new Claim("roles", user.Role),
-                 new Claim("Date", DateTime.Now.ToString()),
+                 new Claim(Claims.UserRoles, user.Role),
+                 new Claim(Claims.ClaimCreationDate, DateTime.Now.ToString()),
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
              };
 

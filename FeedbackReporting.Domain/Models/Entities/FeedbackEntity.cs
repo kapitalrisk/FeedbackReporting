@@ -18,8 +18,8 @@ namespace FeedbackReporting.Domain.Models.Entities
         [Column("description")]
         public string Description { get; set; }
 
-        [Column("creator_id")]
-        public string CreatorId { get; set; }
+        [Column("creator_name")]
+        public string CreatorName { get; set; }
 
         [Column("creation_date")]
         public DateTime CreationDate { get; set; }
