@@ -43,6 +43,7 @@ namespace FeedbackReporting.Application
             services.AddTransient<ICreateFeedbackUseCase, CreateFeedbackUseCase>();
             services.AddTransient<IGetFeedbackByIdUseCase, GetFeedbackByIdUseCase>();
             services.AddTransient<IAttachDocumentToFeedbackUseCase, AttachDocumentToFeedbackUseCase>();
+            services.AddTransient<IGetFeedbackAttachmentsZipUseCase, GetFeedbackAttachmentsZipUseCase>();
         }
     }
 }
