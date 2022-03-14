@@ -11,7 +11,7 @@ COPY Utils/InMemoryDatabase/InMemoryDatabase.csproj ./Utils/InMemoryDatabase/
 RUN dotnet restore Source/FeedbackReporting.Presentation/FeedbackReporting.Presentation.csproj
 
 # copy source code
-COPY Sources/. ./Source/.
+COPY Source/. ./Source/.
 COPY Utils/. ./Utils/.
 
 # build solution
