@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utils\InMemoryDatabase\InMemoryDatabase.csproj" />
+    <ProjectReference Include="..\..\Utils\InMemoryDatabase\InMemoryDatabase.csproj" />
   </ItemGroup>
 
 </Project>

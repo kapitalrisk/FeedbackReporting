@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FeedbackReporting.Application\FeedbackReporting.Application.csproj" />
+    <ProjectReference Include="..\..\Source\FeedbackReporting.Application\FeedbackReporting.Application.csproj" />
     <ProjectReference Include="..\..\Utils\InMemoryDatabase\InMemoryDatabase.csproj" />
   </ItemGroup>
 
