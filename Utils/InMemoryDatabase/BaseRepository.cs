@@ -45,6 +45,8 @@ namespace InMemoryDatabase
 
     public class BaseRepository<TEntity> : BaseRepository
     {
+        protected Type _entityType = typeof(TEntity);
+
         protected BaseRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
 

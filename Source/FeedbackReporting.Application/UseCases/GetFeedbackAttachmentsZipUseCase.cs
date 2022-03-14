@@ -4,6 +4,7 @@ using InMemoryDatabase.UseCasePattern;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FeedbackReporting.Application.UseCases
@@ -27,9 +28,9 @@ namespace FeedbackReporting.Application.UseCases
 
             foreach (var attachment in attachments)
             {
-                var file = zipArchive.CreateEntry($"attachment_{attachment.Id}");
+                var file = zipArchive.CreateEntry(attachment.FileName);
                 using var streamWriter = new StreamWriter(file.Open());
-                streamWriter.Write(attachment.Data);
+                streamWriter.Write(Encoding.UTF8.GetString(attachment.Data));
             }
 
             return resultMemoryStream;

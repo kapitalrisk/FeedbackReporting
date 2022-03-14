@@ -100,6 +100,7 @@ namespace FeedbackReporting.Presentation
                 dbGenerator.RegisterTableEntity(typeof(FeedbackEntity));
                 dbGenerator.RegisterTableEntity(typeof(UserEntity));
                 dbGenerator.RegisterTableEntity(typeof(FeedbackAttachmentEntity));
+                dbGenerator.RegisterTableEntity(typeof(FeedbackKeywordEntity));
                 dbGenerator.GenerateDatabaseAsync();
 
                 // Insert default admin user, again never do that

@@ -2,7 +2,6 @@
 using FeedbackReporting.Domain.Models.Ressources;
 using FeedbackReporting.Domain.UseCases;
 using FeedbackReporting.Presentation.CustomAttributes;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,18 +20,21 @@ namespace FeedbackReporting.Presentation.Controllers
         private readonly IGetFeedbackByIdUseCase _getFeedbackByIdUseCase;
         private readonly IAttachDocumentToFeedbackUseCase _attachDocumentToFeedbackUseCase;
         private readonly IGetFeedbackAttachmentsZipUseCase _getFeedbackAttachmentsUseCase;
+        private readonly ISearchFeedbackUseCase _searchFeedbackUseCase;
 
         public FeedbackController(ILogger<FeedbackController> logger, 
             ICreateFeedbackUseCase createFeedbackUseCase, 
             IGetFeedbackByIdUseCase getFeedbackByIdUseCase, 
             IAttachDocumentToFeedbackUseCase attachDocumentToFeedbackUseCase,
-            IGetFeedbackAttachmentsZipUseCase getFeedbackAttachmentsUseCase)
+            IGetFeedbackAttachmentsZipUseCase getFeedbackAttachmentsUseCase,
+            ISearchFeedbackUseCase searchFeedbackUseCase)
         {
             _logger = logger;
             _createFeedbackUseCase = createFeedbackUseCase;
             _getFeedbackByIdUseCase = getFeedbackByIdUseCase;
             _attachDocumentToFeedbackUseCase = attachDocumentToFeedbackUseCase;
             _getFeedbackAttachmentsUseCase = getFeedbackAttachmentsUseCase;
+            _searchFeedbackUseCase = searchFeedbackUseCase;
         }
 
         [HttpPost]
@@ -50,7 +52,7 @@ namespace FeedbackReporting.Presentation.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        [Authorize(UserRoles.Admin)]
+        [AuthorizedRoles(UserRoles.Admin)]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _getFeedbackByIdUseCase.ExecuteAsync(id);
@@ -71,7 +73,7 @@ namespace FeedbackReporting.Presentation.Controllers
 
             var memoryStream = new MemoryStream();
             await attachment.CopyToAsync(memoryStream);
-            var result = await _attachDocumentToFeedbackUseCase.ExecuteAsync(new FeedbackAttachmentRessource { FeedbackId = feedbackId, Data = memoryStream.ToArray() });
+            var result = await _attachDocumentToFeedbackUseCase.ExecuteAsync(new FeedbackAttachmentRessource { FeedbackId = feedbackId, FileName = attachment.FileName, Data = memoryStream.ToArray() });
 
             return Ok(result);
         }
@@ -84,6 +86,16 @@ namespace FeedbackReporting.Presentation.Controllers
             var result = await _getFeedbackAttachmentsUseCase.ExecuteAsync(feedbackId);
 
             return File(result.ToArray(), "application/zip", $"attachments_{feedbackId}.zip");
+        }
+
+        [HttpPost]
+        [Route("search")]
+        [AuthorizedRoles(UserRoles.Admin)]
+        public async Task<IActionResult> SearchFeedbacks([FromBody] FeedbackSearchRessource searchRequest)
+        {
+            var results = await _searchFeedbackUseCase.ExecuteAsync(searchRequest);
+
+            return Ok(results);
         }
     }
 }

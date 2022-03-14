@@ -31,6 +31,7 @@ namespace FeedbackReporting.Application
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IFeedbackRepository, FeedbackRepository>();
             services.AddTransient<IFeedbackAttachmentRepository, FeedbackAttachmentRepository>();
+            services.AddTransient<IFeedbackKeywordsRepository, FeedbackKeywordsRepository>();
         }
 
         private static void AddServices(this IServiceCollection services)
@@ -44,6 +45,7 @@ namespace FeedbackReporting.Application
             services.AddTransient<IGetFeedbackByIdUseCase, GetFeedbackByIdUseCase>();
             services.AddTransient<IAttachDocumentToFeedbackUseCase, AttachDocumentToFeedbackUseCase>();
             services.AddTransient<IGetFeedbackAttachmentsZipUseCase, GetFeedbackAttachmentsZipUseCase>();
+            services.AddTransient<ISearchFeedbackUseCase, SearchFeedbackUseCase>();
         }
     }
 }

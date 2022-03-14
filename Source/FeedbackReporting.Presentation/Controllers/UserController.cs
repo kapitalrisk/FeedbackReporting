@@ -1,6 +1,7 @@
 ﻿using FeedbackReporting.Domain.Constants;
 using FeedbackReporting.Domain.Models.Ressources;
 using FeedbackReporting.Domain.Services;
+using FeedbackReporting.Presentation.CustomAttributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -38,20 +39,12 @@ namespace FeedbackReporting.Presentation.Controllers
             }
             _logger.LogDebug($"User {user.UserName} not found");
 
-            return NotFound(user); // Well not found or bad password...
+            return NotFound(user); // Well not found or bad password... But for security reasons we do not tell the difference in the response
         }
-
-        //[HttpGet("UserList")]
-        //[Authorize(Roles = "User")]
-        //public IActionResult getAllUsers()
-        //{
-        //    var result = _authentication.getUserList<User>();
-        //    return Ok(result);
-        //}
 
         [HttpPost]
         [Route("create")]
-        [Authorize(Roles = UserRoles.Admin)]
+        [AuthorizedRoles(UserRoles.Admin)]
         public async Task<IActionResult> Create([FromBody] UserRessource user)
         {
             _logger.LogDebug($"Create new user {user.Name}");
@@ -68,7 +61,7 @@ namespace FeedbackReporting.Presentation.Controllers
 
         [HttpDelete]
         [Route("{name}")]
-        [Authorize(Roles = UserRoles.Admin)]
+        [AuthorizedRoles(UserRoles.Admin)]
         public async Task<IActionResult> Delete(string name)
         {
             if (await _jwtService.DeleteUserByEmail(name))

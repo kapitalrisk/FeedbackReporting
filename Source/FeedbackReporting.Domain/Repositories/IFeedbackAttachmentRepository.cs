@@ -8,5 +8,6 @@ namespace FeedbackReporting.Domain.Repositories
     {
         Task<int> Insert(FeedbackAttachmentEntity entityToInsert);
         Task<IEnumerable<FeedbackAttachmentEntity>> GetAttachmentsByFeedbackId(int feedbackId);
+        Task<FeedbackAttachmentEntity> GetAttachmentsByFeedbackIdAndFileName(int feedbackId, string fileName);
     }
 }

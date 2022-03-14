@@ -17,6 +17,9 @@ namespace FeedbackReporting.Domain.Models.Entities
         [Column("feedback_id")]
         public int FeedbackId { get; set; }
 
+        [Column("file_name")]
+        public string FileName { get; set; }
+
         [Column("data")]
         public byte[] Data { get; set; }
     }
