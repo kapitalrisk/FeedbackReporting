@@ -20,22 +20,22 @@ If you choose Docker you can open https://0.0.0.0:8000/swagger/index.html to acc
 
 The first thing you will want to do is login an user. 
 
-By default two users of the two available roles already exists at startup : an 'Admin' role (userName 'admin', password 'admin') and a simple 'User' role (userName 'user', password 'user'). You can create more in the '/user' entry points.
+By default two users of the two available roles already exists at startup : an 'Admin' role (userName 'admin', password 'admin') and a simple 'User' role (userName 'user', password 'user'). You can create more in the '/user' entry point.
 
 ![Admin login](/ReadmeImages/login_admin.PNG?raw=true "Admin login exemple")
 
-After you had login yourself you will be provided an access token.
+After you have login yourself you will be provided an access token.
 This token can be used in swagger using the 'Authorize' button to register the access token for further requests. This access token last for an hour before needing to re-log your user. 
 
 Do not forget to add "Bearer" before copy pasting your access token.
 
 ![Access Token](/ReadmeImages/set_access_token_swagger.PNG?raw=true "Authorization header")
 
-Then go on and create your first feedback entry. The create feedback entry point will return the id of the entry inserted. You can also attach documents to your feedback entry.Only feedback creation and attachments upload is available to simples 'User', the remaining (user creation, search, etc) is only available to 'Admins'.
+Then go on and create your first feedback entry. The create feedback entry point will return the id of the entry inserted. You can also attach documents to your feedback entry. Only feedback creation and attachments upload is available to simples 'User' role, the remaining (user creation, search, etc) is only available to 'Admin' role.
 
 The search entry point provide a keyword based search to avoid 'LIKE %' SQL requests in database. Keep in mind that this search is only performed on feedback description and on words that are more than 3 characters long. 
 
-For thoses who will open source code the keyword mechanisme is more to trigger discussion than a real implementation (for instance the GetHashCode method is not safe from collisions).
+For thoses who will open source code the keyword mechanism is more to trigger discussion than a real implementation (for instance the GetHashCode method is not safe from collisions).
 
 ### Features
 - In memory sqlite database generator / connection factory / plus a BaseRepository implementation with UnitOfWork pattern
