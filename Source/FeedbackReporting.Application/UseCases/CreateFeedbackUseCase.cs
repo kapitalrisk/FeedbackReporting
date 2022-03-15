@@ -29,6 +29,9 @@ namespace FeedbackReporting.Application.UseCases
 
             var insertedId = await _feedbackRepo.Insert(ressource.ToEntity());
             ressource.Id = insertedId;
+
+            // Bad practice to perform this action here
+            // This better be a background task
             await GenerateKeywords(ressource);
 
             return insertedId;
