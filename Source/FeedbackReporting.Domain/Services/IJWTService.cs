@@ -8,6 +8,6 @@ namespace FeedbackReporting.Domain.Services
         string GenerateJWT(UserRessource user);
         Task<UserRessource> LoginUser(LoginRessource loginIdentifiers);
         Task<bool> CreateUser(UserRessource user);
-        Task<bool> DeleteUserByEmail(string email);
+        Task<bool> DeleteUserByName(string email);
     }
 }

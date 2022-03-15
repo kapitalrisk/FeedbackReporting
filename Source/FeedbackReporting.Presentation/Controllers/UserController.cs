@@ -64,7 +64,7 @@ namespace FeedbackReporting.Presentation.Controllers
         [AuthorizedRoles(UserRoles.Admin)]
         public async Task<IActionResult> Delete(string name)
         {
-            if (await _jwtService.DeleteUserByEmail(name))
+            if (await _jwtService.DeleteUserByName(name))
             {
                 _logger.LogDebug($"User {name} successfully deleted");
                 return Ok();

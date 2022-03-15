@@ -65,9 +65,9 @@ namespace FeedbackReporting.Application.Services
             return true;
         }
 
-        public async Task<bool> DeleteUserByEmail(string email)
+        public async Task<bool> DeleteUserByName(string name)
         {
-            return await _userRepo.DeleteByName(email);
+            return await _userRepo.DeleteByName(name);
         }
     }
 }
