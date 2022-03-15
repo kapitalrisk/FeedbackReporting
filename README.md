@@ -15,6 +15,7 @@ docker run -it --rm -p 8000:80 --name feedbackreporting_app feedbackreporting
 ```
 
 If you are running from your IDE you can open https://localhost:44386/swagger/index.html to access Swagger.
+
 If you choose Docker you can open https://0.0.0.0:8000/swagger/index.html to access Swagger.
 
 The first thing you will want to do is login an user. 
