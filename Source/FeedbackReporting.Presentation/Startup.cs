@@ -46,7 +46,7 @@ namespace FeedbackReporting.Presentation
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header\r\n\r\n Enter 'Bearer <accessToken>'.\r\n\r\nExample: \"Bearer sqddgfz5sq547wx4\"",
+                    Description = "JWT Authorization header\n\n Enter 'Bearer <accessToken>'.\n\nExample: \"Bearer sqddgfz5sq547wx4\"",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                  {
