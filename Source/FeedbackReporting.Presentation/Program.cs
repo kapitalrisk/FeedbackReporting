@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace FeedbackReporting.Presentation
 {
@@ -7,6 +8,7 @@ namespace FeedbackReporting.Presentation
     {
         public static void Main(string[] args)
         {
+            Random r = new Random();
             CreateHostBuilder(args).Build().Run();
         }
 

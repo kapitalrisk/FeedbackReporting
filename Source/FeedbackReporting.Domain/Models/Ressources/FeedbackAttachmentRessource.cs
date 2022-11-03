@@ -3,7 +3,7 @@
 namespace FeedbackReporting.Domain.Models.Ressources
 {
     public class FeedbackAttachmentRessource
-    {
+    {        
         public int Id { get; set; }
         public int FeedbackId { get; set; }
         public string FileName { get; set; }

@@ -90,7 +90,7 @@ namespace InMemoryDatabase
             }
         }
 
-        private void AttachTransaction(ISelectSqlSqlStatementOptionsBuilder<TEntity> statement)
+        private void AttachTransaction(ISelectSqlStatementOptionsBuilder<TEntity> statement)
         {
             if (_unitOfWork.Transaction != null)
             {
